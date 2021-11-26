@@ -6,9 +6,10 @@ import re
 from typing import TYPE_CHECKING
 
 from mdformat import codepoints
+from mdformat._conf import DEFAULT_OPTS
 
 if TYPE_CHECKING:
-    from mdformat.renderer import RenderTreeNode
+    from mdformat.renderer import RenderContext, RenderTreeNode
 
 # Regex that finds character references.
 # The reference can be either
@@ -72,15 +73,24 @@ def maybe_add_link_brackets(link: str) -> str:
     return link
 
 
-def get_list_marker_type(node: RenderTreeNode) -> str:
+def get_list_marker_type(node: RenderTreeNode, context: RenderContext) -> str:
     if node.type == "bullet_list":
         mode = "bullet"
-        primary_marker = "-"
-        secondary_marker = "*"
+        primary_marker = context.options.get("mdformat", {}).get(
+            "primary_bullet_list_marker", DEFAULT_OPTS["primary_bullet_list_marker"]
+        )
+        secondary_marker = context.options.get("mdformat", {}).get(
+            "secondary_bullet_list_marker", DEFAULT_OPTS["secondary_bullet_list_marker"]
+        )
     else:
         mode = "ordered"
-        primary_marker = "."
-        secondary_marker = ")"
+        primary_marker = context.options.get("mdformat", {}).get(
+            "primary_ordered_list_marker", DEFAULT_OPTS["primary_ordered_list_marker"]
+        )
+        secondary_marker = context.options.get("mdformat", {}).get(
+            "secondary_ordered_list_marker",
+            DEFAULT_OPTS["secondary_ordered_list_marker"],
+        )
     consecutive_lists_count = 1
     current = node
     while True:

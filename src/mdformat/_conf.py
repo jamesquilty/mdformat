@@ -10,6 +10,12 @@ DEFAULT_OPTS = {
     "wrap": "keep",
     "number": False,
     "end_of_line": "lf",
+    "primary_bullet_list_marker": "-",
+    "secondary_bullet_list_marker": "*",
+    "primary_ordered_list_marker": ".",
+    "secondary_ordered_list_marker": ")",
+    "thematic_break_character": "_",
+    "thematic_break_width": 70,
 }
 
 
@@ -58,6 +64,11 @@ def _validate_values(opts: Mapping, conf_path: Path) -> None:
     if "number" in opts:
         if not isinstance(opts["number"], bool):
             raise InvalidConfError(f"Invalid 'number' value in {conf_path}")
+    if "primary_bullet_list_marker" in opts:
+        if opts["primary_bullet_list_marker"] not in {"*", "+", "-"}:
+            raise InvalidConfError(
+                f"Invalid 'primary_bullet_list_marker' value in {conf_path}"
+            )
 
 
 def _validate_keys(opts: Mapping, conf_path: Path) -> None:

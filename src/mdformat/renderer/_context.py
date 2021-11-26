@@ -52,8 +52,14 @@ def make_render_children(separator: str) -> Render:
 
 
 def hr(node: RenderTreeNode, context: RenderContext) -> str:
-    thematic_break_width = 70
-    return "_" * thematic_break_width
+    # options: Mapping[str, Any]
+    thematic_break_width = context.options.get("mdformat", {}).get(
+        "thematic_break_width", DEFAULT_OPTS["thematic_break_width"]
+    )
+    thematic_break_character = context.options.get("mdformat", {}).get(
+        "thematic_break_character", DEFAULT_OPTS["thematic_break_character"]
+    )
+    return thematic_break_character * thematic_break_width
 
 
 def code_inline(node: RenderTreeNode, context: RenderContext) -> str:
@@ -462,7 +468,7 @@ def list_item(node: RenderTreeNode, context: RenderContext) -> str:
 
 
 def bullet_list(node: RenderTreeNode, context: RenderContext) -> str:
-    marker_type = get_list_marker_type(node)
+    marker_type = get_list_marker_type(node, context)
     first_line_indent = " "
     indent = " " * len(marker_type + first_line_indent)
     block_separator = "\n" if is_tight_list(node) else "\n\n"
@@ -493,7 +499,7 @@ def ordered_list(node: RenderTreeNode, context: RenderContext) -> str:
     consecutive_numbering = context.options.get("mdformat", {}).get(
         "number", DEFAULT_OPTS["number"]
     )
-    marker_type = get_list_marker_type(node)
+    marker_type = get_list_marker_type(node, context)
     first_line_indent = " "
     block_separator = "\n" if is_tight_list(node) else "\n\n"
     list_len = len(node.children)
