@@ -16,6 +16,7 @@ DEFAULT_OPTS = {
     "secondary_ordered_list_marker": ")",
     "thematic_break_character": "_",
     "thematic_break_width": 70,
+    "escape_square_brackets": True,
 }
 
 
@@ -64,11 +65,43 @@ def _validate_values(opts: Mapping, conf_path: Path) -> None:
     if "number" in opts:
         if not isinstance(opts["number"], bool):
             raise InvalidConfError(f"Invalid 'number' value in {conf_path}")
-    if "primary_bullet_list_marker" in opts:
-        if opts["primary_bullet_list_marker"] not in {"*", "+", "-"}:
-            raise InvalidConfError(
-                f"Invalid 'primary_bullet_list_marker' value in {conf_path}"
-            )
+    if "primary_bullet_list_marker" in opts and opts[
+        "primary_bullet_list_marker"
+    ] not in {"*", "+", "-"}:
+        raise InvalidConfError(
+            f"Invalid 'primary_bullet_list_marker' value in {conf_path}"
+        )
+    if "secondary_bullet_list_marker" in opts and opts[
+        "secondary_bullet_list_marker"
+    ] not in {"*", "+", "-"}:
+        raise InvalidConfError(
+            f"Invalid 'secondary_bullet_list_marker' value in {conf_path}"
+        )
+    # if "primary_ordered_list_marker" in opts and opts[
+    #     "primary_ordered_list_marker"
+    # ] not in {".", ")"}:
+    #     raise InvalidConfError(
+    #         f"Invalid 'primary_ordered_list_marker' value in {conf_path}"
+    #     )
+    # if "secondary_ordered_list_marker" in opts and opts[
+    #     "secondary_ordered_list_marker"
+    # ] not in {".", ")"}:
+    #     raise InvalidConfError(
+    #         f"Invalid 'secondary_ordered_list_marker' value in {conf_path}"
+    #     )
+    # if "thematic_break_width" in opts and 3 < opts["thematic_break_width"] > 120:
+    #     raise InvalidConfError(
+    #         f"Invalid 'thematic_break_width' value in {conf_path} "
+    #         f"(must be between 3 and 120)"
+    #     )
+    # if "escape_square_brackets" in opts and opts["escape_square_brackets"] not in {
+    #     True,
+    #     False,
+    # }:
+    #     raise InvalidConfError(
+    #         f"Invalid 'escape_square_brackets' value in {conf_path}"
+    #         f"(must be 'true' or 'false')"
+    #     )
 
 
 def _validate_keys(opts: Mapping, conf_path: Path) -> None:

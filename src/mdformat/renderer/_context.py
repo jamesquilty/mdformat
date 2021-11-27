@@ -121,10 +121,13 @@ def text(node: RenderTreeNode, context: RenderContext) -> str:
 
     text = escape_asterisk_emphasis(text)  # Escape emphasis/strong marker.
     text = escape_underscore_emphasis(text)  # Escape emphasis/strong marker.
-    text = text.replace("[", "\\[")  # Escape link label enclosure
-    text = text.replace("]", "\\]")  # Escape link label enclosure
     text = text.replace("<", "\\<")  # Escape URI enclosure
     text = text.replace("`", "\\`")  # Escape code span marker
+    if context.options.get("mdformat", {}).get(
+        "escape_square_brackets", DEFAULT_OPTS["escape_square_brackets"]
+    ):
+        text = text.replace("[", "\\[")  # Escape link label enclosure
+        text = text.replace("]", "\\]")  # Escape link label enclosure
 
     # Escape "&" if it starts a sequence that can be interpreted as
     # a character reference.
