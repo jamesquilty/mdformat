@@ -9,6 +9,7 @@ from typing import Any, Literal
 from markdown_it import MarkdownIt
 from markdown_it.renderer import RendererHTML
 
+from mdformat._conf import DEFAULT_OPTS
 import mdformat.plugins
 
 NULL_CTX = nullcontext()
@@ -38,6 +39,11 @@ def build_mdit(
     mdit.options["codeformatters"] = {
         lang: mdformat.plugins.CODEFORMATTERS[lang] for lang in codeformatters
     }
+
+    if mdformat_opts.get("entity_substitution", DEFAULT_OPTS["entity_substitution"]):
+        mdit.enable("entity")
+    else:
+        mdit.disable("entity")
 
     return mdit
 

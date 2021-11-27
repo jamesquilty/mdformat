@@ -17,6 +17,7 @@ DEFAULT_OPTS = {
     "thematic_break_character": "_",
     "thematic_break_width": 70,
     "escape_square_brackets": True,
+    "entity_substitution": True,
 }
 
 

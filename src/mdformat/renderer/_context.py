@@ -129,9 +129,12 @@ def text(node: RenderTreeNode, context: RenderContext) -> str:
         text = text.replace("[", "\\[")  # Escape link label enclosure
         text = text.replace("]", "\\]")  # Escape link label enclosure
 
-    # Escape "&" if it starts a sequence that can be interpreted as
-    # a character reference.
-    text = RE_CHAR_REFERENCE.sub(r"\\\g<0>", text)
+    if context.options.get("mdformat", {}).get(
+        "entity_substitution", DEFAULT_OPTS["entity_substitution"]
+    ):
+        # Escape "&" if it starts a sequence that can be interpreted as
+        # a character reference.
+        text = RE_CHAR_REFERENCE.sub(r"\\\g<0>", text)
 
     # The parser can give us consecutive newlines which can break
     # the markdown structure. Replace two or more consecutive newlines
